@@ -1,0 +1,12 @@
+name    'puppet-jenkins_job_builder'
+version '0.0.1'
+project_page 'https://github.com/openstack-hyper-v/puppet-jenkins_job_builder'
+source 'https://github.com/openstack-hyper-v/puppet-jenkins_job_builder'
+author 'Timothy J Rogers'
+license 'Apache License, Version 2.0'
+summary 'A module for configuring Jenkins Job Builder'
+description 'A module for configuring Jenkins Job Builder'
+
+dependency 'puppetlabs/vcsrepo'
+dependency 'puppetlabs/stdlib'
+dependency 'stankevich/python'
