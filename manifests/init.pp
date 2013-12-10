@@ -1,10 +1,10 @@
 class jenkins_job_builder (
-  $jjb_checkout_dir = $jenkins_job_builder::params::jjb_checkout_dir,
-  $jjb_source_repo  = $jenkins_job_builder::params::jjb_source_repo,
-  $jjb_username     = $jenkins_job_builder::params::jjb_username,
-  $jjb_token        = $jenkins_job_builder::params::jjb_token,
-  $jjb_jenkins_url  = $jenkins_job_builder::params::jjb_jenkins_url,
-  $jjb_configfile   = $jenkins_job_builder::params::jjb_configfile,
+  $jjb_checkout_dir   = $jenkins_job_builder::params::jjb_checkout_dir,
+  $jjb_source_repo    = $jenkins_job_builder::params::jjb_source_repo,
+  $jjb_username       = $jenkins_job_builder::params::jjb_username,
+  $jjb_token          = $jenkins_job_builder::params::jjb_token,
+  $jjb_jenkins_url    = $jenkins_job_builder::params::jjb_jenkins_url,
+  $jjb_configfilepath = $jenkins_job_builder::params::jjb_configfilepath,
 ) inherits jenkins_job_builder::params {
 
   package { "git": ensure => present }
@@ -26,7 +26,11 @@ class jenkins_job_builder (
     creates => '/usr/local/bin/jenkins-jobs',
   }
 
-  file { $jjb_configfile:
+  file { $jjb_configfilepath:
+    ensure = directory,
+  }
+  
+  file { "${jjb_configfilepath}/jenkins_jobs.ini":
     ensure  => file,
     content => template('jenkins_job_builder/configfile.erb'),
   }
