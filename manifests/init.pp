@@ -28,7 +28,7 @@ class jenkins_job_builder (
 
   file { $jjb_configfile:
     ensure  => file,
-    content => template('configfile.erb'),
+    content => template('jenkins_job_builder/configfile.erb'),
   }
 
 }
