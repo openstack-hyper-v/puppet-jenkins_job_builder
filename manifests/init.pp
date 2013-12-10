@@ -27,12 +27,13 @@ class jenkins_job_builder (
   }
 
   file { $jjb_configfilepath:
-    ensure = directory,
+    ensure => directory,
   }
   
   file { "${jjb_configfilepath}/jenkins_jobs.ini":
     ensure  => file,
     content => template('jenkins_job_builder/configfile.erb'),
+    require => File[$jjb_configfilepath],
   }
 
 }

@@ -10,6 +10,6 @@ class jenkins_job_builder::params {
   $jjb_token        = ''
   $jjb_jenkins_url  = 'http://localhost:8080/'
 
-  $jjb_configfile   = '/etc/jenkins_jobs'
+  $jjb_configfilepath   = '/etc/jenkins_jobs'
 
 } # Class:: jenkins_job_builder::params
