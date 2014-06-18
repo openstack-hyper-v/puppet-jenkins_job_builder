@@ -21,9 +21,9 @@ class jenkins_job_builder (
   exec { 'setup_jenkins_job_builder':
     command => "python setup.py install",
     cwd     => $jjb_checkout_dir,
-    path    => "/usr/bin", 
+#    path    => "/usr/bin", 
     require => [Class['python'], Vcsrepo[$jjb_checkout_dir]],
-    creates => '/usr/local/bin/jenkins-jobs',
+#    creates => '/usr/local/bin/jenkins-jobs',
   }
 
   file { $jjb_configfilepath:
