@@ -7,41 +7,50 @@ class jenkins_job_builder (
   $jjb_configfilepath = $jenkins_job_builder::params::jjb_configfilepath,
 ) inherits jenkins_job_builder::params {
 
-  if !defined(Package['git']){
-    package { 'git': ensure => present }
-  }
-  if !defined(Package['python-setuptools']){
-    package { 'python-setuptools':
-      ensure  => present,
-      require => Class['python'],
-    }
-  }
+#  if !defined(Package['git']){
+#    package { 'git': ensure => present }
+#  }
+#  if !defined(Package['python-setuptools']){
+#    package { 'python-setuptools':
+#      ensure  => present,
+#      require => Class['python'],
+#    }
+#  }
+
+  $packs = ['jenkins-job-builder', 'PyYAML', 'argparse']
+
   class { 'python':
     version => 'system',
     pip     => true,
   }
 
-  vcsrepo { $jjb_checkout_dir:
-    ensure   => latest,
-    provider => git,
-    source   => $jjb_source_repo,
-    revision => "master",
-    require  => Package['git'],
+  package { $packs:
+    ensure   => installed,
+    provider => pip,
+    require  => Class['python'],
   }
 
-  exec { 'setup_jenkins_job_builder':
-    command => "python setup.py install",
-    cwd     => $jjb_checkout_dir,
-    path    => $::osfamily ? {
-                'windows' => 'c:/windows/system32;c:/windows;c:/python27/bin',
-                default   => '/usr/bin',
-               },
-    require => [Package['python-setuptools'], Vcsrepo[$jjb_checkout_dir]],
-    creates => $::osfamily ? {
-                'windows' => '',
-                default   => '/usr/local/bin/jenkins-jobs',
-               },
-  }
+#  vcsrepo { $jjb_checkout_dir:
+#    ensure   => latest,
+#    provider => git,
+#    source   => $jjb_source_repo,
+#    revision => "master",
+#    require  => Package['git'],
+#  }
+
+#  exec { 'setup_jenkins_job_builder':
+#    command => "python setup.py install",
+#    cwd     => $jjb_checkout_dir,
+#    path    => $::osfamily ? {
+#                'windows' => 'c:/windows/system32;c:/windows;c:/python27/bin',
+#                default   => '/usr/bin',
+#               },
+#    require => [Package['python-setuptools'], Vcsrepo[$jjb_checkout_dir]],
+#    creates => $::osfamily ? {
+#                'windows' => '',
+#                default   => '/usr/local/bin/jenkins-jobs',
+#               },
+#  }
 
   file { $jjb_configfilepath:
     ensure => directory,
@@ -54,3 +63,4 @@ class jenkins_job_builder (
   }
 
 }
+
