@@ -1,6 +1,6 @@
 class jenkins_job_builder (
-  $jjb_checkout_dir   = $jenkins_job_builder::params::jjb_checkout_dir,
-  $jjb_source_repo    = $jenkins_job_builder::params::jjb_source_repo,
+#  $jjb_checkout_dir   = $jenkins_job_builder::params::jjb_checkout_dir,
+#  $jjb_source_repo    = $jenkins_job_builder::params::jjb_source_repo,
   $jjb_username       = $jenkins_job_builder::params::jjb_username,
   $jjb_token          = $jenkins_job_builder::params::jjb_token,
   $jjb_jenkins_url    = $jenkins_job_builder::params::jjb_jenkins_url,
@@ -19,10 +19,11 @@ class jenkins_job_builder (
 
   $packs = ['jenkins-job-builder', 'PyYAML', 'argparse']
 
-  class { 'python':
-    version => 'system',
-    pip     => true,
-  }
+  ensure_resource('class', 'python', {'pip' => true })
+#  class { 'python':
+#    version => 'system',
+#    pip     => true,
+#  }
 
   package { $packs:
     ensure   => installed,

@@ -3,12 +3,12 @@
 #
 class jenkins_job_builder::params {
 
-  $jjb_checkout_dir = $::osfamily ? {
-    'windows' => 'C:/ProgramData/jenkins_job_builder',
-    default => '/opt/src/jenkins_job_builder',
-  }
-#  $jjb_source_repo  = undef
-  $jjb_source_repo  = 'git://github.com/openstack-infra/jenkins-job-builder.git'
+#  $jjb_checkout_dir = $::osfamily ? {
+#    'windows' => 'C:/ProgramData/jenkins_job_builder',
+#    default => '/opt/src/jenkins_job_builder',
+#  }
+##  $jjb_source_repo  = undef
+#  $jjb_source_repo  = 'git://github.com/openstack-infra/jenkins-job-builder.git'
   
   $jjb_username     = undef
 #  $jjb_username     = 'JenkinsJobBuilder'
