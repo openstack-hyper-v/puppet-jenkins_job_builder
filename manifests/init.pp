@@ -1,5 +1,5 @@
 class jenkins_job_builder (
-  $jjb_src_install    = $jenkins_job_builder::params::jjb_src_install
+  $jjb_src_install    = $jenkins_job_builder::params::jjb_src_install,
   $jjb_checkout_dir   = $jenkins_job_builder::params::jjb_checkout_dir,
   $jjb_source_repo    = $jenkins_job_builder::params::jjb_source_repo,
   $jjb_username       = $jenkins_job_builder::params::jjb_username,
@@ -19,8 +19,9 @@ class jenkins_job_builder (
 #  }
   $base_packs = ['PyYAML', 'argparse']
   $packs = str2bool($jjb_src_install) ? {
-    true  => concat($base_packs, 'python-setuptools'),
-    false => concat($base_packs, 'jenkins-job-builder'),
+#    true  => concat($base_packs, ['python-setuptools']),
+    true  => concat($base_packs, ['setuptools']),
+    false => concat($base_packs, ['jenkins-job-builder']),
   }
 
   ensure_resource('class', 'python', {'pip' => true })
@@ -51,7 +52,7 @@ class jenkins_job_builder (
                   'windows' => 'c:/windows/system32;c:/windows;c:/python27/bin',
                   default   => '/usr/bin',
                  },
-      require => [Package['python-setuptools'], Vcsrepo[$jjb_checkout_dir]],
+      require => [Package[$packs], Vcsrepo[$jjb_checkout_dir]],
       creates => $::osfamily ? {
                   'windows' => '',
                   default   => '/usr/local/bin/jenkins-jobs',
