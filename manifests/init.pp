@@ -1,3 +1,4 @@
+# == Class: jenkins_job_builder
 class jenkins_job_builder (
   $jjb_src_install    = $jenkins_job_builder::params::jjb_src_install,
   $jjb_checkout_dir   = $jenkins_job_builder::params::jjb_checkout_dir,
@@ -19,7 +20,7 @@ class jenkins_job_builder (
 #  }
   $base_packs = ['PyYAML', 'argparse']
   $packs = str2bool($jjb_src_install) ? {
-#    true  => concat($base_packs, ['python-setuptools']),
+#   true  => concat($base_packs, ['python-setuptools']),
     true  => concat($base_packs, ['setuptools']),
     false => concat($base_packs, ['jenkins-job-builder']),
   }
@@ -41,34 +42,27 @@ class jenkins_job_builder (
       ensure   => latest,
       provider => git,
       source   => $jjb_source_repo,
-      revision => "master",
+      revision => 'master',
 #      require  => Package['git'],
     }
-   
     exec { 'install_jenkins_job_builder':
-      command => "python setup.py install",
+      command => 'python setup.py install',
       cwd     => $jjb_checkout_dir,
       path    => $::osfamily ? {
-                  'windows' => 'c:/windows/system32;c:/windows;c:/python27/bin',
-                  default   => '/usr/bin',
-                 },
+        'windows' => 'c:/windows/system32;c:/windows;c:/python27/bin',
+        default   => '/usr/bin',},
       require => [Package[$packs], Vcsrepo[$jjb_checkout_dir]],
       creates => $::osfamily ? {
-                  'windows' => '',
-                  default   => '/usr/local/bin/jenkins-jobs',
-                 },
+        'windows' => '',
+        default   => '/usr/local/bin/jenkins-jobs',},
     }
   }
-
   file { $jjb_configfilepath:
     ensure => directory,
   }
-
   file { "${jjb_configfilepath}/jenkins_jobs.ini":
     ensure  => file,
     content => template('jenkins_job_builder/configfile.erb'),
     require => File[$jjb_configfilepath],
   }
-
 }
-
